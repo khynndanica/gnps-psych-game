@@ -45,9 +45,11 @@ HTML_CODE = """
                 <h3 id="team-beta-name">Team Beta</h3>
                 <div class="score" id="team-beta-score">0</div>
             </div>
+       <div style="text-align: center; margin-top: 20px;">
+            <button onclick="socket.emit('host_action', {'action': 'toggle_timer'})" style="padding: 10px 20px; font-size: 16px; cursor: pointer; margin-right: 10px;">Start/Pause Timer</button>
+            <button onclick="socket.emit('host_action', {'action': 'load_q', 'type': 'easy'})" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Next Question</button>
         </div>
-    </div>
-
+        </div>
     <script>
         const socket = io();
 
@@ -111,6 +113,7 @@ q_indices = {"easy": 0, "med": 0, "diff": 0, "tie": 0}
 
 @socketio.on('connect')
 def handle_connect():
+    socketio.start_background_task(timer_background_task)
     emit('state_update', game_state)
 
 @socketio.on('host_action')
