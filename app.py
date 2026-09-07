@@ -6,17 +6,23 @@ app = Flask( __name__)
 app.config['SECRET_KEY'] = 'psych_quiz_secret_key'
 
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+HTML_CODE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz App</title>
+</head>
+<body>
+    <h1>Quiz Game UI</h1>
+</body>
+</html>
+"""
+
 @app.route('/')
 def index():
-    return "Quiz Server is Live!"
-
-# Game State
+    return render_template_string(HTML_CODE)
 game_state = {
-    "current_level": "easy",
-    "teams": {
-        "Team Alpha": {"score": 0},
-        "Team Beta": {"score": 0}
-    },
     "timer_seconds": 40 * 60,
     "timer_running": False,
     "current_question": {"q": "Welcome! Waiting for organizer to start the quiz.", "pts": 0}
