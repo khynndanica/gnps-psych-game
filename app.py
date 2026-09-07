@@ -50,35 +50,43 @@ HTML_CODE = """
             <button onclick="socket.emit('host_action', {'action': 'load_q', 'type': 'easy'})" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Next Question</button>
         </div>
         </div>
-    <script>
-        const socket = io();
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+    const socket = io();
 
-        socket.on('connect', () => {
-            console.log('Connected to quiz server!');
-        });
+    socket.on('connect', () => {
+        console.log('Connected to quiz server!');
+    });
 
-        socket.on('state_update', (state) => {
-            if (state.current_question) {
-                document.getElementById('question').innerText = state.current_question.q;
-            }
-            if (state.teams) {
-                if (state.teams['Team Alpha']) {
-                    document.getElementById('team-alpha-score').innerText = state.teams['Team Alpha'].score;
-                }
-                if (state.teams['Team Beta']) {
-                    document.getElementById('team-beta-score').innerText = state.teams['Team Beta'].score;
-                }
-            }
-            if (state.timer_seconds !== undefined) {
-                let mins = Math.floor(state.timer_seconds / 60);
-                let secs = state.timer_seconds % 60;
-                document.getElementById('timer').innerText = `Timer: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    socket.on('state_update', (state) => {
+        // 1. Update Timer Display
+        const mins = Math.floor(state.timer_seconds / 60);
+        const secs = state.timer_seconds % 60;
+        const timerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        const timerEl = document.querySelector('.container > div:nth-child(2)');
+        if (timerEl) timerEl.innerText = `Timer: ${timerText}`;
+
+        // 2. Update Question Text
+        const qBox = document.querySelector('.container > div:nth-child(3)');
+        if (qBox && state.current_question) {
+            qBox.innerText = `${state.current_question.q} — [${state.current_question.pts} Points]`;
+        }
+
+        // 3. Update Scores
+        if (state.teams) {
+            const alphaScore = document.getElementById('team-alpha-score');
+            const betaScore = document.getElementById('team-beta-score');
+            if (alphaScore) alphaScore.innerText = state.teams['Team Alpha'].score;
+            if (betaScore) betaScore.innerText = state.teams['Team Beta'].score;
+        }
+  if (betaScore) betaScore.innerText = state.teams['Team Beta'].score;
             }
         });
     </script>
 </body>
 </html>
 """
+
 
 @app.route('/')
 def index():
