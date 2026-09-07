@@ -6,6 +6,9 @@ app = Flask( __name__)
 app.config['SECRET_KEY'] = 'psych_quiz_secret_key'
 
 socketio = SocketIO(app, cors_allowed_origins="*")
+@app.route('/')
+def index():
+    return "Quiz Server is Live!"
 
 # Game State
 game_state = {
