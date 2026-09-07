@@ -83,7 +83,7 @@ def timer_background_task():
             game_state['timer_seconds'] -= 1
             socketio.emit('state_update', game_state)
 
-if name == 'main':
+if __name__ == '__main__':
     # Start the timer task inside the main entry point to prevent double execution
     socketio.start_background_task(timer_background_task)
     port = int(os.environ.get('PORT', 5000))
