@@ -2,10 +2,10 @@ import os
 from flask import Flask, render_template_string, request
 from flask_socketio import SocketIO, emit
 
-app = Flask(name)
+app = Flask( __name__)
 app.config['SECRET_KEY'] = 'psych_quiz_secret_key'
 
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Game State
 game_state = {
