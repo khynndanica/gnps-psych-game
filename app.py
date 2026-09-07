@@ -122,10 +122,9 @@ def timer_background_task():
         if game_state['timer_running'] and game_state['timer_seconds'] > 0:
             game_state['timer_seconds'] -= 1
             socketio.emit('state_update', game_state)
-            
 import os
-    if __name__ == '__main__':
-        import eventlet
-        import eventlet.wsgi
-        socketio.start_background_task(timer_background_task)
-        eventlet.wsgi.server(eventlet.listen(('0.0.0.0', int(os.environ.get('PORT', 5000)))), app)
+if __name__ == '__main__':
+import eventlet
+import eventlet.wsgi
+socketio.start_background_task(timer_background_task)
+eventlet.wsgi.server(eventlet.listen(('0.0.0.0', int(os.environ.get('PORT', 5000)))), app)
